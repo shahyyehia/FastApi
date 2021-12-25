@@ -21,29 +21,34 @@ async def get_restaurant_data(location: str):
     return conn.execute(restaurants.select().where(restaurants.c.location == location)).fetchall()
 
 
-@restaurant.get("/restaurant/{location,type}")
-async def get_restaurant_data(location: str, type:str):
-    return conn.execute(restaurants.select().where(restaurants.c.location == location and restaurants.c.type == type)).fetchall()
+@restaurant.get("/restaurant/{location}/{type}")
+async def get_restaurant_data(location: str, type: str):
+    return conn.execute(
+        restaurants.select().where(restaurants.c.location == location , restaurants.c.type == type)).fetchall()
 
 
 @restaurant.post("/restaurant/")
-async def add_restaurant_data(restaurant : Restaurant):
+async def add_restaurant_data(restaurant: Restaurant):
     conn.execute(restaurants.insert().values(
         name=restaurant.name,
         type=restaurant.type,
         location=restaurant.location
-                                             ))
+    ))
     return conn.execute(restaurants.select()).fetchall()
 
 
-
 @restaurant.put("/restaurant/{id}")
-async def update_restaurant_data(id:int,restaurant:Restaurant):
+async def update_restaurant_data(id: int, restaurant: Restaurant):
     conn.execute(restaurants.update().values(
         name=restaurant.name,
         type=restaurant.type,
         location=restaurant.location
-                                             ).where(restaurants.c.id==id,
-                                                     ))
+    ).where(restaurants.c.id == id
+            ))
     return conn.execute(restaurants.select()).fetchall()
 
+
+@restaurant.delete("/restaurant/{id}")
+async def delete_restaurant_data(id: int):
+    conn.execute(restaurants.delete().where(restaurants.c.id == id))
+    return conn.execute(restaurants.select()).fetchall()
