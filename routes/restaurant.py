@@ -6,27 +6,27 @@ from schema.restaurant import Restaurant
 restaurant = APIRouter()
 
 
-@restaurant.get("restaurant/")
+@restaurant.get("/restaurant/")
 async def read_restaurant_data():
     return conn.execute(restaurants.select()).fetchall()
 
 
-@restaurant.get("restaurant/{type}")
+@restaurant.get("/restaurant/{type}")
 async def get_restaurant_data(type: str):
     return conn.execute(restaurants.select().where(restaurants.c.type == type)).fetchall()
 
 
-@restaurant.get("restaurant/{location}")
+@restaurant.get("/restaurant/{location}")
 async def get_restaurant_data(location: str):
     return conn.execute(restaurants.select().where(restaurants.c.location == location)).fetchall()
 
 
-@restaurant.get("restaurant/{location,type}")
+@restaurant.get("/restaurant/{location,type}")
 async def get_restaurant_data(location: str, type:str):
     return conn.execute(restaurants.select().where(restaurants.c.location == location and restaurants.c.type == type)).fetchall()
 
 
-@restaurant.post("restaurant/")
+@restaurant.post("/restaurant/")
 async def add_restaurant_data(restaurant : Restaurant):
     conn.execute(restaurants.insert().values(
         name=restaurant.name,
@@ -37,7 +37,7 @@ async def add_restaurant_data(restaurant : Restaurant):
 
 
 
-@restaurant.put("restaurant/{id}")
+@restaurant.put("/restaurant/{id}")
 async def update_restaurant_data(id:int,restaurant:Restaurant):
     conn.execute(restaurants.update().values(
         name=restaurant.name,
