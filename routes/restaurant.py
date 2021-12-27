@@ -37,13 +37,12 @@ async def add_restaurant_data(restaurant : Restaurant):
 
 
 
-@restaurant.put("/restaurant/{id}")
-async def update_restaurant_data(id:int,restaurant:Restaurant):
+@restaurant.put("/restaurant/{name}")
+async def update_restaurant_data(name:str,restaurant:Restaurant):
     conn.execute(restaurants.update().values(
         name=restaurant.name,
         type=restaurant.type,
         location=restaurant.location
-                                             ).where(restaurants.c.id==id,
+                                             ).where(restaurants.c.name==name,
                                                      ))
     return conn.execute(restaurants.select()).fetchall()
-
