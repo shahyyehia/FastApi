@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from config.db import conn
-from models.restaurant import restaurants
-from schema.restaurant import Restaurant
+from db import conn
+from restaurantM import restaurants
+from restaurantS import Restaurant
 
 restaurant = APIRouter()
 
@@ -45,4 +45,11 @@ async def update_restaurant_data(name:str,restaurant:Restaurant):
         location=restaurant.location
                                              ).where(restaurants.c.name==name,
                                                      ))
+    return conn.execute(restaurants.select()).fetchall()
+
+
+
+@restaurant.delete("/restaurant/{name}")
+async def delete_users_data(name:str):
+    conn.execute(restaurants.delete().where(restaurants.c.name==name))
     return conn.execute(restaurants.select()).fetchall()
